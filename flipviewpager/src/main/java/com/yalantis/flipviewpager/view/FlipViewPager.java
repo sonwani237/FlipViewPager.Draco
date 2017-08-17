@@ -70,6 +70,7 @@ public class FlipViewPager extends FrameLayout {
 
     private float mLastMotionX = -1;
     private float mLastMotionY = -1;
+    OnClickListener mOnClickListener;
     private int mActivePointerId = INVALID_POINTER;
 
     private OnChangePageListener onChangePageListener;
@@ -92,6 +93,11 @@ public class FlipViewPager extends FrameLayout {
         }
     }
 
+     @Override
+    public void setOnClickListener(@Nullable OnClickListener l) {
+        super.setOnClickListener(l);
+        mOnClickListener = l;
+    }
     private void setFlipDistance(float flipDistance) {
         if (flipDistance == mFlipDistance) return;
         mFlipDistance = flipDistance;
@@ -195,18 +201,7 @@ public class FlipViewPager extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        // Custom code starts here
-        View view = mCurrent.pageView;
-        if (view instanceof ViewGroup) {
-            ViewGroup viewGroup = (ViewGroup) view;
-            for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                final View childView = viewGroup.getChildAt(i);
-                checkIfChildWasClicked(ev, childView);
-            }
-        }
-
-        // Custom code ends here
-        int action = ev.getAction() & MotionEvent.ACTION_MASK;
+       int action = ev.getAction() & MotionEvent.ACTION_MASK;
         if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
             toggleFlip(false);
             mActivePointerId = INVALID_POINTER;
@@ -215,6 +210,8 @@ public class FlipViewPager extends FrameLayout {
         }
 
         if (action != MotionEvent.ACTION_DOWN && !flipping) return false;
+
+        if(action == MotionEvent.ACTION_DOWN && !flipping) return mOnClickListener != null;
 
         switch (action) {
             case MotionEvent.ACTION_MOVE:
@@ -254,6 +251,7 @@ public class FlipViewPager extends FrameLayout {
 
         if (!flipping)
             trackVelocity(ev);
+
         return !flipping;
     }
 
