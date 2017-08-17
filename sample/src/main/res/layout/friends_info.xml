@@ -42,5 +42,19 @@
             android:id="@+id/interest_5"
             style="@style/TextView.Interest" />
     </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/interestsSecondary">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="More"
+            android:gravity="right"
+            android:id="@+id/more"
+            android:layout_marginRight="15sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
 </RelativeLayout>
